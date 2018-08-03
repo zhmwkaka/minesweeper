@@ -1,0 +1,107 @@
+.cell {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+    padding: 2px 3px;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-weight: bold;
+    color: #eeeeee;
+}
+.card-panel {
+    text-align: center; 
+}
+#wrapper {
+    position: relative;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    min-width: 250px;
+    -webkit-user-select: none;
+}
+#header {
+    height: 50px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+    font-size: 32px;
+    text-align: center;
+    line-height: 68px;
+}
+.win#header {
+    background-color: #4db6ac;
+    color: #eeeeee;
+    cursor: pointer;
+}
+.lose#header {
+    background-color: #ef5350;
+    color: #eeeeee;
+    cursor: pointer;
+}
+.normal#header {
+    font-family: Roboto;
+    font-size: 25px;
+    background-color: #90a4ae;
+    color: #ffffff;
+    line-height: 50px;
+    cursor: default;
+}
+.win#map, .lose#map {
+    pointer-events: none;
+}
+.bomb {
+    background-color: #ef5350;
+}
+.mask {
+    background-color: #64b5f6;
+}
+.num {
+    background-color: #26a69a;
+}
+#footer {
+    margin-top: 20px;
+    color: #424242;
+    
+    border-radius: 2px;
+}
+#apply {
+    width: 120px;
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#ok {
+    width: 120px;
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px; 
+}
+#seticon {
+    float: left;
+    font-size: 35px;
+    font-weight: bold;
+    color: #90a4ae;
+}
+svg {
+    fill: currentColor;
+}
+
+td {
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+.collapsible-body p {
+    padding: 10px 10px;
+}
+
+.input-field {
+    margin-top: 10px;
+}

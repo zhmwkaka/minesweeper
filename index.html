@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>minesweeper</title>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+		<script type="text/javascript" src="game.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css" media="screen,projection" />
+		<link type="text/css" rel="stylesheet" href="game.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+
+    <body>
+        <div class="card-panel">
+            <div class="card-panel" id="wrapper" oncontextmenu=return(false)>
+                <div id="header"></div>
+                <div id="map"></div>
+                <ul class="collapsible" data-collapsible="accordion" id="footer">
+                    <li>
+                        <div class="collapsible-header" id="settings">
+                            <div id="seticon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38
+                                    2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <form action="#">
+                                    <p class="range-field">
+                                        <label>Bomb</label>
+                                        <input type="range" oninput="pcsrange()" name="bomb" id="bomb" min=0 max=30 value=10/>
+                                    </p>
+                                </form>
+                                <div class="input-field col s6">
+                                    <input value=10 id="row" oninput="pcsinput()"type="text" class="validate">
+                                    <label for="row">Row</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input value=10 id="column" oninput="pcsinput()" type="text" class="validate">
+                                    <label for="column">Column</label>
+                                </div>
+                                <div class="btn-container">
+                                    <button class="btn waves-effect waves-light disabled" id="ok">OK</button>
+                                    <button class="btn waves-effect waves-light disabled" id="apply">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            var rowMAX = 20, colMAX = 20     
+            var row = document.getElementById('row')
+            var col = document.getElementById('column')
+            var bomb = document.getElementById('bomb')
+            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                row.value = 7
+                col.value = 7
+                bomb.max = Math.floor(row.value * col.value / 3)
+                bomb.value = 7
+                document.getElementById('apply').classList.add('hide')
+                rowMAX = 7
+                colMAX = 7
+            } else {
+                row.value = 10
+                col.value = 10
+                bomb.max = Math.floor(row.value * col.value / 3)
+                bomb.value = 10
+            }
+            
+            var win = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>'
+            var lose = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+            start = new Start(row.value, col.value, bomb.value, ['', '1', '2', '3', '4', '5', '6', '7', '8', '', '', '', win, lose, ''])
+            
+            var btnapply = document.getElementById('apply')
+            var btnok = document.getElementById('ok')
+            var pcsapply = function () {
+                if (row.value > rowMAX || col.value > colMAX) {
+                    Materialize.toast('too large!', 4000)
+                    return
+                }
+                if (bomb.value > Math.floor(row.value * col.value / 3)) {
+                    Materialize.toast('too many bombs!', 4000)
+                    return
+                }
+                start.row = row.value
+                start.col = col.value
+                start.num_bomb = bomb.value
+                start.reset()
+                start.init()
+                btnapply.classList.add('disabled')
+                btnok.classList.add('disabled')
+                btnapply.removeEventListener('click', pcsapply)
+                btnok.removeEventListener('click', pcsok)
+            }
+            var pcsok = function () {
+                pcsapply()
+                document.getElementById('settings').dispatchEvent(new MouseEvent('click'))
+            }
+            
+            var pcsrange = function () {
+                btnapply.classList.remove('disabled')
+                btnok.classList.remove('disabled')
+                btnapply.addEventListener('click', pcsapply)
+                btnok.addEventListener('click', pcsok)
+            }
+            var pcsinput = function () {
+                pcsrange()
+                bomb.max = Math.floor(row.value * col.value / 3)
+            }
+            
+
+            
+        </script>
+
+    </body>
+</html>
